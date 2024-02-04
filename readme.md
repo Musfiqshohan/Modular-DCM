@@ -1,4 +1,4 @@
-This repository is going through some updates.
+This repository is going through some updates. Full codes will be uploaded soon.
 
 
 1. Change "path_to_project" with the path to your project.

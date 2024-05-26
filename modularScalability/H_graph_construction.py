@@ -69,26 +69,6 @@ def hasBackdoor(Observed_DAG, mediator, node2, visited):
     return ret
 
 
-# def hasBackdoor(Complete_DAG, cur, mediator, node2, visited):
-#     visited.append(mediator)
-#     if mediator in node2:
-#         return True
-#
-#     ret= False
-#     if cur=='parent': #I am a parent now. I can be parent or child. I am being just parent here. Can be child below.
-#         for par in Complete_DAG[mediator]:  #looping over parents of mine and going here.
-#             if par not in visited:
-#                 ret= ret or hasBackdoor(Complete_DAG, 'parent', par, node2, visited)
-#
-#
-#
-#
-#     for nd in Complete_DAG:  #I am a parent/child now. I can be only be child. Being parent will make a collider.
-#         if mediator in Complete_DAG[nd] and nd not in visited and nd not in node2: #checking if I am parent of nd not already visited and is not a direct parent of node2. A direct parent gets conditioned/intervened
-#             ret = ret or hasBackdoor(Complete_DAG, 'child', nd, node2, visited)
-#
-#
-#     return ret
 
 
 def merge_nodes(H_graph, ndlist):
@@ -239,10 +219,7 @@ def get_parents(Observed_DAG, cur_joint ):
 
 def Find_Joint(latent_conf, confTochild, Observed_DAG, H_graph, cur_joint):
 
-    # print("->",cur_joint)
     prev_joint= []
-
-    # while prev_joint!=cur_joint:
 
     prev_joint= copy.deepcopy(cur_joint)
 
@@ -255,8 +232,7 @@ def Find_Joint(latent_conf, confTochild, Observed_DAG, H_graph, cur_joint):
 
     T_y=[]
     for var in cur_joint:
-        # if var not in T_y:
-            T_y += Find_MACS(Observed_DAG,latent_conf, confTochild, [],  var)
+        T_y += Find_MACS(Observed_DAG,latent_conf, confTochild, [],  var)
 
     cur_joint = list(set(cur_joint + T_y))
 
@@ -338,22 +314,7 @@ def set_LargeGraph(noise_states, latent_state, obs_state, Data_intervs):
     for conf in confTochild:
         label_dim[conf] = latent_state
 
-    # intervention_list = [{"expr":"P(W_0|do(X_0))", "obs":['W0'], "inter_vars":['X0']},
-    #                      {"expr": "P(W_1|do(X_0,X_1,X_2))", "obs": ['W1'], "inter_vars": ['X0','X1','X2']},
-    #                      {"expr": "P(X_0,W_1,W_0,Y_0|do(X_1,X_2))", "obs": ['X0', 'W1', 'W0','Y0'], "inter_vars": ['X1','X2']},
-    #                      {"expr": "P(X_1,X_2,W_1,Y_1|do(X_0))", "obs": ['X1','X2','W1','Y1'], "inter_vars": ['X0']},
-    #                      {"expr": "P(V)", "obs": ['X0', 'X1','X2','W1','Y1', 'W0', 'Y0'], "inter_vars": []}
-    #                      ]
-    #
-    # for lid in range(len(intervention_list)):
-    #     intervention_list[lid]["expr"] = getdoKey(intervention_list[lid]["obs"], intervention_list[lid]["inter_vars"])  #set math expression for future exp
-    #
     interv_queries = []
-    # for intervention in intervention_list:
-    #     perms = generate_permutations([label_dim[lb] for lb in intervention["inter_vars"]])
-    #     key_val = [dict(zip(intervention["inter_vars"], comb)) for comb in perms]
-    #     interv_queries.append({"obs": intervention["obs"], "intervs": key_val, "expr": intervention["expr"]})
-
 
     exogenous = {}
     for label in label_names:
@@ -413,29 +374,6 @@ def set_LargeGraph(noise_states, latent_state, obs_state, Data_intervs):
 
 
 
-
-
-    # train_mech_dict["W0"] = [{'parents': ['X0'], 'intv': {}, 'compare': ['W0']}]
-    # train_mech_dict["W1"] =  [{'parents': ['X0', 'X1', 'X2'], 'intv': {}, 'compare': ['W1']}]
-    #
-    # train_mech_dict["X0"] = [{'parents': ['X1','X2'], 'intv': {}, 'compare': ['X0','W1', 'W0', 'Y0']}]
-    # train_mech_dict["Y0"] = [{'parents': ['X1','X2'], 'intv': {}, 'compare': ['X0', 'W1', 'W0',  'Y0']}]
-    #
-    # train_mech_dict["X1"] = [{'parents': ['X0'], 'intv': {}, 'compare': ['X1', 'X2', 'W1', 'Y1']}]
-    # train_mech_dict["X2"] = [{'parents': ['X0'], 'intv': {}, 'compare': ['X1', 'X2', 'W1', 'Y1']}]
-    # train_mech_dict["Y1"] = [{'parents': ['X0'], 'intv': {}, 'compare': ['X1', 'X2', 'W1', 'Y1']}]
-    #
-    #
-    # # just for full training
-    # for lb in train_mech_dict:
-    #     train_mech_dict[lb]=[{'parents': [], 'intv': {}, 'compare': label_names}]
-    #
-    #
-    #
-    # print("printing")
-    # for label in label_names:
-    #     print(label, train_mech_dict[label])
-
     for label in Observed_DAG:
         if label not in image_labels:
             label_dim["n" + label] = noise_states
@@ -448,6 +386,6 @@ def set_LargeGraph(noise_states, latent_state, obs_state, Data_intervs):
 
 if __name__ == '__main__':
 
-    # G= set_LargeGraph(2, 2, 2, [{},{'17':0}])
-    G= set_LargeGraph(2, 2, 2, [{}])
-    # print(G.DAG_desc)
+    #Returns an H-graph for a specific large causal graph.
+    # G= set_LargeGraph(2, 2, 2, [{},{'17':0}])  # when you have intervention on node 17.
+    G= set_LargeGraph(2, 2, 2, [{}]) # no intervention.

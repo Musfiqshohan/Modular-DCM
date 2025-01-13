@@ -36,7 +36,7 @@ To address this, we propose modular training of deep causal generative models th
 
 ### 3. CelebA-HQ (Invariant Prediction)
 - **Objective**: Train causal invariant classifiers for robust attribute prediction under domain shifts.
-- **Graph**: `Sex ↔ Eyeglass → Image; Sex → Eyeglass`.
+- **Graph**: `Sex → Image ← Eyeglass; Sex ↔ Eyeglass `.
 - **Results**: Improved prediction accuracy under domain shifts by leveraging generated interventional datasets.
 
 ### 4. MNIST Diamond Graph (Complex Semi-synthetic)
